@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="search-section">
+        <h2>Search Tour Packages</h2>
+        <input type="text" id="destination" placeholder="Enter travel destination" />
+        <button id="search-btn">Search</button>
+        
+        <div class="packages" id="packages">
+            <!-- Tour packages will be displayed here -->
+        </div>
+    </div>
+    <script src="dest.js"></script>
+</body>
+</html>
+<style>
+    .search-section {
+    padding: 20px;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+#destination {
+    padding: 10px;
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#search-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #28a745;
+    color: white;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.packages {
+    margin-top: 20px;
+}
+
+.package-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+</style>

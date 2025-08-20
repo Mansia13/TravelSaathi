@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navbar Example</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar .logo img {
+            height: 30px;
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar ul li {
+            display: inline;
+        }
+
+        .navbar ul li a {
+            text-decoration: none;
+            color: black;
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        .navbar ul li a:hover {
+            color: darkgreen;
+        }
+
+        .navbar .login-btn {
+            background-color: black;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .navbar .login-btn:hover {
+            background-color: darkgreen;
+            color: white;
+        }
+
+        .search-icon {
+            font-size: 20px;
+            cursor: pointer;
+            margin-right: 6px;
+        }
+        .search-bar {
+            border:3px solid black;
+            padding:3px 184px;
+            border-radius :15px;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <!-- Logo -->
+        <div class="logo">
+            <img src="logo.png" alt="Trip Planner AI">
+        </div>
+
+        <!-- Links and Search -->
+        <ul>
+            <li><a href="#">My Trips</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <div class="he-he">
+            <li><span class="search-icon"><i class="fas fa-search"></i></span></li>
+            <li><input="text" class="search-bar"  placeholder="Search for trips, hotels, restaurants, etc."></li>
+        </div>
+        </ul>
+
+        <!-- Login Button -->
+        <a href="#" class="login-btn">Sign In</a>
+    </nav>
+
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Preferences Form</title>
+    <style>
+       body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #0d0d0d; /* Dark background */
+    color: #f1f1f1; /* Light text */
+}
+
+.container {
+    max-width: 700px;
+    margin: 50px auto;
+    background-color: #1b1b1b; /* Dark container background */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+h2 {
+    text-align: center;
+    font-size: 26px;
+    color: #00F260; /* Gradient accent color */
+    margin-bottom: 25px;
+    background: linear-gradient(to right, #00F260, #0575E6); /* Gradient text */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+label {
+    display: block;
+    margin: 15px 0 10px;
+    font-weight: 600;
+    color: #f1f1f1; /* Light text */
+}
+
+select, input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 2px solid #333; /* Darker border */
+    border-radius: 6px;
+    font-size: 16px;
+    background-color: #333; /* Dark input background */
+    color: #f1f1f1;
+}
+
+select:focus, input[type="text"]:focus {
+    border-color: #00F260; /* Gradient accent border */
+    outline: none;
+}
+
+.budget-options, .travel-options {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.card {
+    flex: 1;
+    text-align: center;
+    padding: 15px;
+    margin: 0 10px;
+    cursor: pointer;
+    border: 2px solid #333; /* Darker border */
+    border-radius: 10px;
+    transition: background-color 0.3s, border-color 0.3s;
+    background-color: #b1b1b1; /* Match container background */
+}
+
+.card img {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 10px;
+}
+
+.card p {
+    font-weight: 600;
+    color: #1b1b1b; /* Light text */
+}
+
+.card.selected {
+    background-color: #0575E6; /* Gradient accent */
+    border-color: #0575E6; /* Matching border */
+    color: #000; /* Dark text for better contrast */
+}
+
+.generate-btn {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background-color: #0575E6; /* Vibrant blue */
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.generate-btn:hover {
+    background-color: #93c52d; /* Gradient hover effect */
+}
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Tell us your travel preferences 🌍✈️🌴</h2>
+
+        <label for="destination">What is destination of choice?</label>
+        <select id="destination">
+            <option value="" disabled selected>Select...</option>
+            <option value="Paris">Paris</option>
+            <option value="Tokyo">Tokyo</option>
+            <option value="New York">New York</option>
+            <option value="Maldives">Maldives</option>
+        </select>
+
+        <label for="days">How many days are you planning your trip?</label>
+        <input type="text" id="days" placeholder="e.g. 3">
+
+        <label>What is Your Budget?</label>
+        <div class="budget-options">
+            <div class="card" id="cheap">
+                <img src="https://img.icons8.com/ios-filled/50/000000/money.png" alt="Cheap">
+                <p>Cheap</p>
+            </div>
+            <div class="card" id="moderate">
+                <img src="https://img.icons8.com/ios-filled/50/000000/money-bag.png" alt="Moderate">
+                <p>Moderate</p>
+            </div>
+            <div class="card" id="luxury">
+                <img src="https://img.icons8.com/ios-filled/50/000000/diamond.png" alt="Luxury">
+                <p>Luxury</p>
+            </div>
+        </div>
+
+        <label>Who do you plan on traveling with on your next adventure?</label>
+        <div class="travel-options">
+            <div class="card" id="family">
+                <img src="https://img.icons8.com/ios-filled/50/000000/family.png" alt="Family">
+                <p>Family</p>
+            </div>
+            <div class="card" id="friends">
+                <img src="https://img.icons8.com/ios-filled/50/000000/friends.png" alt="Friends">
+                <p>Friends</p>
+            </div>
+            <div class="card" id="couple">
+                <img src="https://img.icons8.com/ios-filled/50/000000/hearts.png" alt="Couple">
+                <p>Couple</p>
+            </div>
+            <div class="card" id="justme">
+                <img src="https://img.icons8.com/ios-filled/50/000000/user.png" alt="Just Me">
+                <p>Just Me</p>
+            </div>
+        </div>
+
+        <button class="generate-btn" onclick="generateTrip()">Generate Trip</button>
+    </div>
+
+    <script>
+        // Handle budget option selection
+        const budgetCards = document.querySelectorAll('.budget-options .card');
+        let selectedBudget = null;
+        budgetCards.forEach(card => {
+            card.addEventListener('click', function() {
+                budgetCards.forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedBudget = this.id;
+            });
+        });
+
+        // Handle travel companion selection
+        const travelCards = document.querySelectorAll('.travel-options .card');
+        let selectedCompanion = null;
+        travelCards.forEach(card => {
+            card.addEventListener('click', function() {
+                travelCards.forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedCompanion = this.id;
+            });
+        });
+
+        function generateTrip() {
+            const destination = document.getElementById('destination').value;
+            const days = document.getElementById('days').value;
+
+            if (!destination || !days || !selectedBudget || !selectedCompanion) {
+                alert('Please fill out all fields and make selections before generating a trip!');
+                return;
+            }
+
+            alert(`Trip Details:\nDestination: ${destination}\nDays: ${days}\nBudget: ${selectedBudget}\nCompanion: ${selectedCompanion}`);
+        }
+    </script>
+
+</body>
+</html>
