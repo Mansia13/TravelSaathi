@@ -78,23 +78,24 @@ if (!$stmt) {
     exit();
 }
 
-// Bind parameters if any
-$stmt->bind_param($types, ...$params);
-if ($result->num_rows === 0) {
-    echo "<pre>DEBUG: No rows found\n";
-    echo "Start City: $start_city\n";
-    echo "Destination: $destination\n";
-    echo "Travel Date: $travel_date\n";
-    echo "Budget: $budget\n";
-    echo "Max Duration: $max_duration\n";
-    echo "Airline: $airline\n";
-    echo "Package Type: $package_type\n</pre>";
-}
+
 if (!$stmt->execute()) {
     echo "Error executing query: " . $stmt->error;
     exit();
 } else {
     $result = $stmt->get_result();
+    // Bind parameters if any
+   $stmt->bind_param($types, ...$params);
+    if ($result->num_rows === 0) {
+      echo "<pre>DEBUG: No rows found\n";
+      echo "Start City: $start_city\n";
+      echo "Destination: $destination\n";
+      echo "Travel Date: $travel_date\n";
+      echo "Budget: $budget\n";
+      echo "Max Duration: $max_duration\n";
+      echo "Airline: $airline\n";
+      echo "Package Type: $package_type\n</pre>";
+}
 }
 
 ?>
@@ -602,6 +603,7 @@ p.total-price {
 
 
 </style>
+
 
 
 
