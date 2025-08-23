@@ -1,6 +1,4 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 
 if (isset($_GET['search'])) {
     $search = $_GET['search'];
@@ -10,6 +8,9 @@ if (isset($_GET['search'])) {
 <?php
 include 'db_connect.php';
 include "header.php";
+$res = mysqli_query($conn, "SELECT COUNT(*) as total FROM travel_data");
+$row = mysqli_fetch_assoc($res);
+echo "Rows in travel_data: " . $row['total'];
 
 // Retrieve search inputs
 $start_city = $_GET['start_city'] ?? '';
@@ -595,3 +596,4 @@ p.total-price {
 
 
 </style>
+
