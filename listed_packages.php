@@ -9,6 +9,7 @@ if (isset($_GET['search'])) {
 include 'db_connect.php';
 include "header.php";
 
+
 // Retrieve search inputs
 $start_city = $_GET['start_city'] ?? '';
 $destination = $_GET['destination'] ?? '';
@@ -79,7 +80,16 @@ if (!$stmt) {
 
 // Bind parameters if any
 $stmt->bind_param($types, ...$params);
-
+if ($result->num_rows === 0) {
+    echo "<pre>DEBUG: No rows found\n";
+    echo "Start City: $start_city\n";
+    echo "Destination: $destination\n";
+    echo "Travel Date: $travel_date\n";
+    echo "Budget: $budget\n";
+    echo "Max Duration: $max_duration\n";
+    echo "Airline: $airline\n";
+    echo "Package Type: $package_type\n</pre>";
+}
 if (!$stmt->execute()) {
     echo "Error executing query: " . $stmt->error;
     exit();
@@ -592,6 +602,7 @@ p.total-price {
 
 
 </style>
+
 
 
 
