@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 if (isset($_GET['search'])) {
     $search = $_GET['search'];
 }
@@ -588,6 +591,7 @@ p.total-price {
     font-weight: bold; /* Make it bold */
     margin: 0; /* Remove default margin */
 }
+
 
 
 </style>
