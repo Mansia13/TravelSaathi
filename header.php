@@ -1,7 +1,8 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    @session_start();
 }
+
 
 
 // Check if the email is set in the URL and not in the session
@@ -184,4 +185,5 @@ if (isset($_GET['email']) && !isset($_SESSION['user_email'])) {
         }
     }
 </style>
+
 
