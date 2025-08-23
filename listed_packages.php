@@ -87,20 +87,6 @@ if (!$stmt->execute()) {
     $result = $stmt->get_result();
 }
 
-$sql = "SELECT * FROM travel_data";
-$result = mysqli_query($conn, $sql);
-
-if (!$result) {
-    die("Query failed: " . mysqli_error($conn));
-}
-
-if (mysqli_num_rows($result) == 0) {
-    echo "⚠️ No packages found";
-} else {
-    while ($row = mysqli_fetch_assoc($result)) {
-        echo "<pre>"; print_r($row); echo "</pre>";
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -606,5 +592,6 @@ p.total-price {
 
 
 </style>
+
 
 
