@@ -37,7 +37,7 @@ FROM travel_data WHERE uniq_id = ?";
         for ($i = 1; $i <= 10; $i++) {
             $imageCol = 'image' . $i;
             if (!empty($row[$imageCol])) {
-                $imageContent .= "<img src='{$row[$imageCol]}' alt='Image $i'>";
+                $imageContent .= "<img src='/" . htmlspecialchars($row[$imageCol]) . "' alt='Image $i' onerror=\"this.src='/images/placeholder.jpg';\">";
             }
         }
     } else {
@@ -367,5 +367,6 @@ body {
 .coupon strong {
     color: #00F260; /* Green for coupon codes */
 }
+
 
 </style>
