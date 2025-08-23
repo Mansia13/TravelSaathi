@@ -8,9 +8,6 @@ if (isset($_GET['search'])) {
 <?php
 include 'db_connect.php';
 include "header.php";
-$res = mysqli_query($conn, "SELECT COUNT(*) as total FROM travel_data");
-$row = mysqli_fetch_assoc($res);
-echo "Rows in travel_data: " . $row['total'];
 
 // Retrieve search inputs
 $start_city = $_GET['start_city'] ?? '';
@@ -89,9 +86,22 @@ if (!$stmt->execute()) {
 } else {
     $result = $stmt->get_result();
 }
+
+$sql = "SELECT * FROM travel_data";
+$result = mysqli_query($conn, $sql);
+
+if (!$result) {
+    die("Query failed: " . mysqli_error($conn));
+}
+
+if (mysqli_num_rows($result) == 0) {
+    echo "⚠️ No packages found";
+} else {
+    while ($row = mysqli_fetch_assoc($result)) {
+        echo "<pre>"; print_r($row); echo "</pre>";
+    }
+}
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -596,4 +606,5 @@ p.total-price {
 
 
 </style>
+
 
