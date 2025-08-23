@@ -1,104 +1,112 @@
 <?php
-
 if (isset($_GET['search'])) {
     $search = $_GET['search'];
 }
-?>
 
-<?php
 include 'db_connect.php';
 include "header.php";
 
-
 // Retrieve search inputs
-$start_city = $_GET['start_city'] ?? '';
-$destination = $_GET['destination'] ?? '';
-$travel_date = $_GET['travel_date'] ?? '';
+$start_city   = $_GET['start_city']   ?? '';
+$destination  = $_GET['destination']  ?? '';
+$travel_date  = $_GET['travel_date']  ?? '';
 $rooms_guests = $_GET['rooms_guests'] ?? '1';
-$airline = $_GET['airline'] ?? '';
+$airline      = $_GET['airline']      ?? '';
 $package_type = $_GET['package_type'] ?? '';
 $max_duration = $_GET['max_duration'] ?? 9;
-$budget = $_GET['budget'] ?? 215000;
+$budget       = $_GET['budget']       ?? 215000;
 
 // Set price column based on rooms/guests input
 $price_column = ($rooms_guests === '2') ? 'price_per_two' : 'price_per_person';
 
 // Handle empty airline and package type
-$airline = empty($airline) ? '%' : '%' . $airline . '%';
+$airline      = empty($airline) ? '%' : '%' . $airline . '%';
 $package_type = empty($package_type) ? '%' : '%' . $package_type . '%';
 
 // Get the logged-in user's email from the session
 $userEmail = $_SESSION['user_email'] ?? '';
 
-// SQL query to retrieve packages and check if each package is favorited by the user
+// SQL query
 $sql = "
 SELECT td.uniq_id, td.image1, td.start_city, td.destination, td.duration, td.airline, td.package_type, td.itinerary, $price_column, td.sightseeing_details,
-       IF(f.email IS NOT NULL, 1, 0) AS is_favorite,  -- Check if the package is favorited by the user
+       IF(f.email IS NOT NULL, 1, 0) AS is_favorite,
        (
-           (td.start_city LIKE ?) * 6 +  -- Higher weight for starting city
-           (td.destination LIKE ?) * 6 + -- Higher weight for destination
-           (td.travel_date = ?) * 2      -- Moderate weight for travel date
+           (td.start_city LIKE ?) * 6 +
+           (td.destination LIKE ?) * 6 +
+           (td.travel_date = ?) * 2
        ) AS match_score
 FROM travel_data td
-LEFT JOIN favorites f ON td.uniq_id = f.uniq_id AND f.email = ?  -- Join with favorites to get liked status
+LEFT JOIN favorites f ON td.uniq_id = f.uniq_id AND f.email = ?
 WHERE (
         (td.start_city LIKE ? OR td.destination LIKE ? OR td.travel_date = ?)
     )
-AND td.duration BETWEEN 1 AND ?  -- Filter by max duration
+AND td.duration BETWEEN 1 AND ?
 AND $price_column IS NOT NULL
-AND $price_column <= ?  -- Filter by budget
+AND $price_column <= ?
 AND td.airline LIKE ?
 AND td.package_type LIKE ?
 HAVING match_score > 0
 ORDER BY match_score DESC, $price_column ASC";
 
-// Params and types for binding
+// Parameters
 $params = [
-    '%' . $start_city . '%',   // start_city
-    '%' . $destination . '%',  // destination
-    $travel_date,              // travel_date
-    $userEmail,                // user email to check if the package is liked
-    '%' . $start_city . '%',   // start_city for WHERE clause
-    '%' . $destination . '%',  // destination for WHERE clause
-    $travel_date,              // travel_date for WHERE clause
-    $max_duration,             // max_duration
-    $budget,                   // budget
-    '%' . $airline . '%',      // airline
-    '%' . $package_type . '%'  // package_type
+    '%' . $start_city . '%',   // 1. start_city match_score
+    '%' . $destination . '%',  // 2. destination match_score
+    $travel_date,              // 3. travel_date match_score
+    $userEmail,                // 4. user email
+    '%' . $start_city . '%',   // 5. start_city WHERE
+    '%' . $destination . '%',  // 6. destination WHERE
+    $travel_date,              // 7. travel_date WHERE
+    $max_duration,             // 8. max_duration
+    $budget,                   // 9. budget
+    $airline,                  // 10. airline
+    $package_type              // 11. package_type
 ];
 
-// Updated types string to match 11 parameters
-$types = 'sssssssidss'; // s=string, i=integer, d=double
+// Types (11 params → sssssssidss)
+$types = 'sssssssidss';
 
-
-// Prepare and execute the statement
+// Prepare statement
 $stmt = $conn->prepare($sql);
 if (!$stmt) {
     echo "Error preparing statement: " . $conn->error;
     exit();
 }
 
+// Bind BEFORE execute
+$stmt->bind_param($types, ...$params);
 
+// Execute
 if (!$stmt->execute()) {
     echo "Error executing query: " . $stmt->error;
     exit();
 } else {
     $result = $stmt->get_result();
-    // Bind parameters if any
-   $stmt->bind_param($types, ...$params);
-    if ($result->num_rows === 0) {
-      echo "<pre>DEBUG: No rows found\n";
-      echo "Start City: $start_city\n";
-      echo "Destination: $destination\n";
-      echo "Travel Date: $travel_date\n";
-      echo "Budget: $budget\n";
-      echo "Max Duration: $max_duration\n";
-      echo "Airline: $airline\n";
-      echo "Package Type: $package_type\n</pre>";
-}
-}
 
+    if ($result->num_rows === 0) {
+        echo "<pre>DEBUG: No rows found\n";
+        echo "Start City: $start_city\n";
+        echo "Destination: $destination\n";
+        echo "Travel Date: $travel_date\n";
+        echo "Budget: $budget\n";
+        echo "Max Duration: $max_duration\n";
+        echo "Airline: $airline\n";
+        echo "Package Type: $package_type\n</pre>";
+    } else {
+        // Example loop to display packages
+        while ($row = $result->fetch_assoc()) {
+            echo "<div>";
+            echo "<h3>" . htmlspecialchars($row['destination']) . " (" . htmlspecialchars($row['start_city']) . ")</h3>";
+            echo "<p>Airline: " . htmlspecialchars($row['airline']) . "</p>";
+            echo "<p>Package: " . htmlspecialchars($row['package_type']) . "</p>";
+            echo "<p>Duration: " . htmlspecialchars($row['duration']) . " nights</p>";
+            echo "<p>Price: " . htmlspecialchars($row[$price_column]) . "</p>";
+            echo "</div><hr>";
+        }
+    }
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -603,6 +611,7 @@ p.total-price {
 
 
 </style>
+
 
 
 
